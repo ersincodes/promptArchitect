@@ -7,11 +7,12 @@ export interface Answers {
 }
 
 export enum AppState {
-  WELCOME = 'WELCOME',
-  WIZARD = 'WIZARD',
-  GENERATING = 'GENERATING',
-  RESULT = 'RESULT',
-  ERROR = 'ERROR'
+  WELCOME = "WELCOME",
+  WIZARD = "WIZARD",
+  GENERATING = "GENERATING",
+  RESULT = "RESULT",
+  PROMPT = "PROMPT",
+  ERROR = "ERROR",
 }
 
 export interface WizardStepProps {

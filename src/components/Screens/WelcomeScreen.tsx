@@ -15,7 +15,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
         <BrainCircuit className="w-16 h-16 text-indigo-400" />
       </div>
       <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-6 tracking-tight">
-        Persona Architect
+        Prompt Architect
       </h1>
       <p className="text-lg md:text-xl text-slate-400 max-w-xl mb-10 leading-relaxed">
         Stop writing generic personas. Build{" "}

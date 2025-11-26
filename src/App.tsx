@@ -5,6 +5,7 @@ import { WelcomeScreen } from "./components/Screens/WelcomeScreen";
 import { GeneratingScreen } from "./components/Screens/GeneratingScreen";
 import { ErrorScreen } from "./components/Screens/ErrorScreen";
 import ResultScreen from "./components/Screens/ResultScreen";
+import PromptBuilderScreen from "./components/Screens/PromptBuilderScreen";
 import Wizard from "./components/Wizard/Wizard";
 import { useWizard } from "./hooks/useWizard";
 import { generateSystemPersona } from "./services/geminiService";
@@ -60,6 +61,14 @@ const App: React.FC = () => {
     setAppState(AppState.WELCOME);
   };
 
+  const handleOpenPromptBuilder = () => {
+    if (!generatedPersona) {
+      return;
+    }
+
+    setAppState(AppState.PROMPT);
+  };
+
   const renderContent = () => {
     switch (appState) {
       case AppState.WELCOME:
@@ -87,7 +96,20 @@ const App: React.FC = () => {
 
       case AppState.RESULT:
         return (
-          <ResultScreen persona={generatedPersona} onReset={handleReset} />
+          <ResultScreen
+            persona={generatedPersona}
+            onReset={handleReset}
+            onBuildPrompt={handleOpenPromptBuilder}
+          />
+        );
+
+      case AppState.PROMPT:
+        return (
+          <PromptBuilderScreen
+            persona={generatedPersona}
+            onBack={() => setAppState(AppState.RESULT)}
+            onReset={handleReset}
+          />
         );
 
       case AppState.ERROR:
@@ -107,8 +129,8 @@ const App: React.FC = () => {
     <Layout
       onReset={handleReset}
       showReset={
-        appState !== AppState.GENERATING && appState !== AppState.WELCOME
-      }>
+          appState !== AppState.GENERATING && appState !== AppState.WELCOME
+        }>
       {renderContent()}
     </Layout>
   );
