@@ -1,48 +1,83 @@
 import React from "react";
-import { BrainCircuit, Play } from "lucide-react";
-import { cn } from "../../lib/utils";
+import { Play, ArrowUpRight } from "lucide-react";
+import { ParallaxShowcase } from "../Parallax/ParallaxShowcase";
+import { ImmersiveScrollExperience } from "../Experience/ImmersiveScrollExperience";
 
 interface WelcomeScreenProps {
   onStart: () => void;
 }
 
 const BADGES = ["Coding", "Brainstorming", "Writing", "Strategy"];
+const METRICS = [
+  { label: "Workflow steps", value: "4 curated prompts" },
+  { label: "Avg. build time", value: "2 mins end-to-end" },
+  { label: "AI assistants", value: "All major copilots" },
+];
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 animate-fade-in">
-      <div className="bg-gradient-to-br from-primary/20 to-secondary/20 p-6 rounded-3xl mb-8 border border-white/5 shadow-2xl shadow-indigo-500/10">
-        <BrainCircuit className="w-16 h-16 text-indigo-400" />
-      </div>
-      <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-6 tracking-tight">
-        Prompt Architect
-      </h1>
-      <p className="text-lg md:text-xl text-slate-400 max-w-xl mb-10 leading-relaxed">
-        Stop writing generic personas. Build{" "}
-        <span className="text-indigo-400 font-semibold">expert-level</span>{" "}
-        system instructions tailored to your exact role, workflow, and creative
-        needs.
-      </p>
-      <div className="flex flex-wrap gap-4 justify-center">
-        {BADGES.map((badge) => (
-          <div
-            key={badge}
-            className="px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700 text-slate-400 text-sm">
-            {badge}
+    <>
+      <section className="grid gap-12 md:grid-cols-[1.1fr_0.9fr] items-center">
+        <div className="space-y-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+            AI Prompt Architect
           </div>
-        ))}
-      </div>
-      <button
-        onClick={onStart}
-        className={cn(
-          "mt-10 group relative px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg",
-          "hover:bg-indigo-50 transition-all duration-300 shadow-lg hover:shadow-indigo-500/25",
-          "flex items-center"
-        )}
-        aria-label="Start Architecting">
-        Start Architecting
-        <Play className="w-5 h-5 ml-2 fill-current group-hover:translate-x-1 transition-transform" />
-      </button>
-    </div>
+
+          <div className="space-y-4">
+            <h1 className="text-4xl leading-tight text-white md:text-6xl md:leading-tight">
+              Design elite system personas in minutes, not meetings.
+            </h1>
+            <p className="text-lg text-slate-400 md:text-xl">
+              Feed your copilots with tailored system instructions that mirror
+              the rigor of Trendy AI’s workflow design. Capture role, tone,
+              rituals, and edge-cases through one guided interview.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-4">
+            <button
+              onClick={onStart}
+              className="inline-flex items-center rounded-full bg-white px-6 py-3 text-base font-semibold text-slate-950 shadow-[0_15px_45px_rgba(15,23,42,0.45)] transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              aria-label="Start architecting workflow">
+              Start architecting
+              <Play className="ml-2 h-4 w-4 fill-current" />
+            </button>
+            <button
+              className="inline-flex items-center rounded-full border border-white/15 px-6 py-3 text-base font-semibold text-white transition hover:border-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+              type="button"
+              aria-label="View example persona placeholder"
+              aria-disabled="true">
+              View example
+              <ArrowUpRight className="ml-2 h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            {BADGES.map((badge) => (
+              <span
+                key={badge}
+                className="rounded-full border border-white/10 px-4 py-1 text-sm text-slate-400">
+                {badge} ops ready
+              </span>
+            ))}
+          </div>
+
+          <div className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-slate-400 md:grid-cols-3">
+            {METRICS.map((metric) => (
+              <div key={metric.label} className="space-y-1">
+                <p className="uppercase tracking-[0.35em] text-xs text-slate-600">
+                  {metric.label}
+                </p>
+                <p className="text-base text-slate-100">{metric.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <ParallaxShowcase />
+      </section>
+
+      <ImmersiveScrollExperience onStart={onStart} />
+    </>
   );
 };
