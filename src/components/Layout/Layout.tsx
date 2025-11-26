@@ -35,7 +35,7 @@ export const Layout: React.FC<LayoutProps> = ({
             <BrainCircuit className="w-5 h-5 text-white" />
           </div>
           <span className="font-bold tracking-tight text-lg hidden sm:block">
-            AI Architect
+            Prompt Architect
           </span>
         </div>
       </header>

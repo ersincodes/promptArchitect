@@ -1,5 +1,5 @@
 {
-  "name": "Persona Architect",
-  "description": "An intelligent tool that constructs high-performance, expert-level system personas for AI assistants, tailored for coding, writing, brainstorming, or strategic analysis based on your specific needs.",
+  "name": "AI Architect",
+  "description": "An intelligent tool that constructs high-performance, expert-level system personas and prompts for AI assistants, tailored for coding, writing, brainstorming, or strategic analysis based on your specific needs.",
   "requestFramePermissions": []
 }

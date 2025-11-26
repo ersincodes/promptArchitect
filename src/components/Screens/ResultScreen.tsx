@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { Copy, Check, ArrowLeft, Zap } from "lucide-react";
+import { Copy, Check, ArrowLeft, Zap, Sparkles } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 interface ResultProps {
   persona: string;
   onReset: () => void;
+  onBuildPrompt: () => void;
 }
 
-const ResultScreen: React.FC<ResultProps> = ({ persona, onReset }) => {
+const ResultScreen: React.FC<ResultProps> = ({
+  persona,
+  onReset,
+  onBuildPrompt,
+}) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -39,6 +44,14 @@ const ResultScreen: React.FC<ResultProps> = ({ persona, onReset }) => {
             className="flex-1 md:flex-none items-center justify-center px-4 py-2 text-sm font-medium text-slate-400 bg-slate-800/50 hover:bg-slate-800 rounded-lg transition-colors border border-slate-700 flex">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Create New
+          </button>
+          <button
+            onClick={onBuildPrompt}
+            className="flex-1 md:flex-none items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600/80 hover:bg-indigo-500 rounded-lg transition-colors border border-indigo-500/60 flex"
+            aria-label="Open prompt builder"
+          >
+            <Sparkles className="w-4 h-4 mr-2" />
+            Build Prompt
           </button>
           <button
             onClick={handleCopy}
