@@ -55,9 +55,11 @@ export const generateSystemPersona = async (
   answers: Answers
 ): Promise<string> => {
   try {
-    const apiKey = import.meta.env.VITE_API_KEY || process.env.API_KEY;
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (!apiKey) {
-      throw new Error("API Key is missing. Please check your environment configuration.");
+      throw new Error(
+        "API Key is missing. Please check your environment configuration."
+      );
     }
 
     const ai = new GoogleGenAI({ apiKey });
@@ -91,15 +93,18 @@ export const generateSystemPersona = async (
     `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash", // Updated to latest stable flash model if available, or keep 1.5/2.0
-      contents: [{
-        parts: [{ text: prompt }]
-      }],
+      model: "gemini-2.0-flash",
+      contents: [
+        {
+          parts: [{ text: prompt }],
+        },
+      ],
     });
 
-    const responseText = response.response.text();
+    // Extract text from the response structure
+    const responseText = response.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!responseText) {
-       throw new Error("No response text generated.");
+      throw new Error("No response text generated.");
     }
     return responseText;
   } catch (error) {

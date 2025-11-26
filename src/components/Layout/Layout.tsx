@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles } from "lucide-react";
+import { BrainCircuit, Sparkles } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -32,10 +32,10 @@ export const Layout: React.FC<LayoutProps> = ({
           }}
           aria-label="Reset and go to home">
           <div className="bg-gradient-to-tr from-primary to-secondary w-8 h-8 rounded-lg flex items-center justify-center shadow-lg">
-            <Sparkles className="w-5 h-5 text-white" />
+            <BrainCircuit className="w-5 h-5 text-white" />
           </div>
           <span className="font-bold tracking-tight text-lg hidden sm:block">
-            Persona Architect
+            AI Architect
           </span>
         </div>
       </header>
@@ -45,7 +45,17 @@ export const Layout: React.FC<LayoutProps> = ({
       </main>
 
       <footer className="relative z-10 text-center py-8 text-slate-600 text-sm">
-        <p>Powered by Ersin Bahar</p>
+        <p>
+          &copy; {new Date().getFullYear()}{" "}
+          <a
+            href="https://www.ersinbahar.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-slate-400 transition-colors">
+            Ersin Bahar
+          </a>
+          . All rights reserved.
+        </p>
       </footer>
     </div>
   );
