@@ -129,8 +129,9 @@ const App: React.FC = () => {
     <Layout
       onReset={handleReset}
       showReset={
-          appState !== AppState.GENERATING && appState !== AppState.WELCOME
-        }>
+        appState !== AppState.GENERATING && appState !== AppState.WELCOME
+      }
+      showNavLinks={appState === AppState.WELCOME}>
       {renderContent()}
     </Layout>
   );

@@ -14,23 +14,26 @@ const BLUEPRINT_STEPS = [
     details: "Align responsibilities + scope.",
   },
   {
-    label: "Tone palette",
-    details: "Voice, guardrails, fallbacks.",
+    label: "Tools, frameworks, and concepts",
+    details: "Technologies, mental models, software, or theories.",
   },
   {
-    label: "Rituals",
-    details: "Cadence + daily checkpoints.",
+    label: "Behavior and reasoning",
+    details: "Checkpoints and recovery strategies.",
   },
   {
-    label: "Edge cases",
-    details: "What not to do and how to recover.",
+    label: "Principles and methodology",
+    details: "Workflow, principles, and architectural rules.",
   },
 ];
 
 const MODULES = [
-  { title: "Voice layer", copy: "Swap between advisor and analyst modes." },
-  { title: "Guardrails", copy: "Auto inject constraints per channel." },
-  { title: "Escalations", copy: "Route unknowns to human partner." },
+  {
+    title: "🎨 Image Generation",
+    copy: "Generate images based on the prompt.",
+  },
+  { title: "💻 Coding", copy: "Have a collaborative coding session." },
+  { title: "💡 Brainstorming", copy: "Brainstorm ideas and solutions." },
 ];
 
 const OUTPUTS = [
@@ -39,14 +42,29 @@ const OUTPUTS = [
     body: "“Act as a growth-strategist with calm optimism.”",
   },
   {
-    title: "Handoff spec",
-    body: "Deliver markdown briefs with KPI tables + risks.",
+    title: "Json prompts",
+    body: "JSON Prompt Models and Techniques will be updated to the latest version.",
   },
   {
-    title: "Launch ritual",
-    body: "Daily sync at 9am, include latest win + blocker.",
+    title: "Impressive Results",
+    body: "Proved to be effective in any kind of work with any AI tool.",
   },
 ];
+
+const SCROLL_DEFAULTS = { duration: 0.7, ease: "power2.out" };
+
+const createPinnedTimeline = (section: HTMLElement, endValue = "+=220%") =>
+  gsap.timeline({
+    defaults: SCROLL_DEFAULTS,
+    scrollTrigger: {
+      trigger: section,
+      start: "center center",
+      end: endValue,
+      scrub: 1.1,
+      anticipatePin: 1,
+      pin: true,
+    },
+  });
 
 export const ImmersiveScrollExperience: React.FC<
   ImmersiveScrollExperienceProps
@@ -69,80 +87,56 @@ export const ImmersiveScrollExperience: React.FC<
     }
 
     const ctx = gsap.context(() => {
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: blueprint,
-            start: "center center",
-            end: "+=220%",
-            scrub: true,
-            pin: true,
-          },
-        })
+      const blueprintTimeline = createPinnedTimeline(blueprint, "+=240%");
+      blueprintTimeline
         .fromTo(
           blueprint.querySelector(".blueprint-heading"),
-          { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 0.6 }
+          { opacity: 0, y: 28 },
+          { opacity: 1, y: 0 }
         )
         .fromTo(
           blueprintCards.current,
-          { opacity: 0, y: 65 },
-          { opacity: 1, y: 0, stagger: 0.15, duration: 0.4 },
-          "<50%"
+          { opacity: 0, y: 50, scale: 0.97 },
+          { opacity: 1, y: 0, scale: 1, stagger: 0.18 },
+          "<40%"
         )
         .to(blueprintCards.current, {
-          opacity: 0.3,
-          duration: 0.4,
-          stagger: 0.2,
+          opacity: 0.4,
+          y: 10,
+          stagger: 0.15,
         });
 
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: composer,
-            start: "center center",
-            end: "+=240%",
-            scrub: true,
-            pin: true,
-          },
-        })
+      const composerTimeline = createPinnedTimeline(composer, "+=260%");
+      composerTimeline
         .fromTo(
           composer.querySelector(".composer-canvas"),
-          { opacity: 0.4, scale: 0.95 },
-          { opacity: 1, scale: 1, duration: 0.6 }
+          { opacity: 0.45, scale: 0.95 },
+          { opacity: 1, scale: 1 }
         )
         .fromTo(
           moduleRefs.current,
-          { opacity: 0, y: 60 },
-          { opacity: 1, y: 0, stagger: 0.2, duration: 0.5 },
-          "<30%"
+          { opacity: 0, y: 48 },
+          { opacity: 1, y: 0, stagger: 0.2 },
+          "<35%"
         )
         .fromTo(
           composer.querySelectorAll(".composer-copy"),
-          { opacity: 0, x: 35 },
-          { opacity: 1, x: 0, stagger: 0.2, duration: 0.4 },
-          "<40%"
+          { opacity: 0, x: 32 },
+          { opacity: 1, x: 0, stagger: 0.18 },
+          "<35%"
         );
 
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: output,
-            start: "center center",
-            end: "+=200%",
-            scrub: true,
-            pin: true,
-          },
-        })
+      const outputTimeline = createPinnedTimeline(output, "+=220%");
+      outputTimeline
         .fromTo(
           output.querySelector(".output-heading"),
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.5 }
+          { opacity: 0, y: 26 },
+          { opacity: 1, y: 0 }
         )
         .fromTo(
           outputRefs.current,
-          { opacity: 0, y: 60 },
-          { opacity: 1, y: 0, stagger: 0.25, duration: 0.4 },
+          { opacity: 0, y: 48 },
+          { opacity: 1, y: 0, stagger: 0.22 },
           "<40%"
         )
         .fromTo(
@@ -169,14 +163,14 @@ export const ImmersiveScrollExperience: React.FC<
         className="relative rounded-[36px] border border-white/5 bg-gradient-to-br from-slate-900 via-slate-900/70 to-slate-900 px-8 py-16 text-white shadow-[0_40px_120px_rgba(2,6,23,0.75)]">
         <div className="blueprint-heading space-y-3">
           <p className="text-xs uppercase tracking-[0.4em] text-indigo-300">
-            Blueprint reel
+            Mastering the Prompt
           </p>
           <h2 className="text-4xl font-semibold">
-            Scroll to watch the persona blueprint assemble.
+            Unlock the full potential of AI
           </h2>
           <p className="max-w-xl text-slate-300">
-            Each swipe locks a new panel into place. Hover to feel the depth,
-            scroll to advance through the flow.
+            Effective prompts yields accurate, relevant, and high-quality
+            results every time.
           </p>
         </div>
         <div className="mt-16 grid gap-6 md:grid-cols-2">
@@ -186,7 +180,7 @@ export const ImmersiveScrollExperience: React.FC<
               ref={(element) => {
                 blueprintCards.current[index] = element;
               }}
-              className="rounded-3xl border border-white/10 bg-white/5 p-5 text-left"
+              className="relative overflow-hidden rounded-3xl border border-indigo-400/15 bg-slate-950/40 p-5 text-left shadow-[0_25px_60px_rgba(2,6,23,0.45)] before:absolute before:inset-0 before:-z-10 before:bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.35),_transparent_65%)] before:opacity-90 before:content-['']"
               tabIndex={0}
               aria-label={`${step.label} blueprint card`}>
               <p className="text-xs uppercase tracking-[0.35em] text-slate-500">
@@ -213,12 +207,11 @@ export const ImmersiveScrollExperience: React.FC<
                 ref={(element) => {
                   moduleRefs.current[index] = element;
                 }}
-                className="mb-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-4 last:mb-0">
+                className="relative mb-6 overflow-hidden rounded-2xl border border-cyan-400/15 bg-slate-950/40 p-4 text-white/90 shadow-[0_18px_45px_rgba(8,47,73,0.45)] last:mb-0 before:absolute before:inset-0 before:-z-10 before:bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.35),_transparent_70%)] before:opacity-90 before:content-['']">
                 <div className="flex items-center justify-between text-sm text-slate-300">
                   <span className="uppercase tracking-[0.35em]">
                     {module.title}
                   </span>
-                  <span className="text-xs text-slate-500">Slot</span>
                 </div>
                 <p className="mt-3 text-base text-white">{module.copy}</p>
               </div>
@@ -227,19 +220,20 @@ export const ImmersiveScrollExperience: React.FC<
           <div className="space-y-6 text-slate-300">
             <div className="composer-copy space-y-2">
               <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">
-                Interactive composer
+                Interactive Collaboration
               </p>
               <h3 className="text-3xl font-semibold text-white">
-                Drag modules into place while guardrails snap into context.
+                Drag your persona next to you while producing or solving
+                problems.
               </h3>
             </div>
             <p className="composer-copy">
-              Scroll to drop voice, guardrail, and escalation layers into the
-              canvas. Each panel reacts with micro-parallax so it feels alive.
+              After you complete the 5 steps, your persona will be ready to for
+              generating images, coding, or brainstorming ideas and all.
             </p>
             <p className="composer-copy">
-              Finish the scroll to prime your runbook before launching the real
-              Prompt Architect flow.
+              You can also take your persona with you to any other tool that
+              supports implementing rules.
             </p>
           </div>
         </div>
@@ -263,7 +257,7 @@ export const ImmersiveScrollExperience: React.FC<
               ref={(element) => {
                 outputRefs.current[index] = element;
               }}
-              className="rounded-3xl border border-white/10 bg-white/5 p-6"
+              className="relative overflow-hidden rounded-3xl border border-emerald-400/15 bg-slate-950/50 p-6 shadow-[0_25px_60px_rgba(4,47,46,0.55)] before:absolute before:inset-0 before:-z-10 before:bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.3),_transparent_70%)] before:opacity-90 before:content-['']"
               tabIndex={0}
               aria-label={`${output.title} preview`}>
               <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
@@ -275,7 +269,7 @@ export const ImmersiveScrollExperience: React.FC<
         </div>
         <div className="mt-10 flex flex-wrap items-center gap-4">
           <span className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-2 text-sm font-semibold text-emerald-200">
-            <span ref={metricRef}>00</span>% fewer rewrites
+            <span ref={metricRef}>00</span>% MORE ACCURATE RESULTS
           </span>
           <button
             onClick={onStart}
