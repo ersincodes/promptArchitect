@@ -7,7 +7,14 @@ interface WelcomeScreenProps {
   onStart: () => void;
 }
 
-const BADGES = ["Coding", "Brainstorming", "Writing", "Strategy"];
+const BADGES = [
+  "Coding",
+  "Brainstorming",
+  "Writing",
+  "Strategy",
+  "Design",
+  "Marketing",
+];
 const METRICS = [
   { label: "Workflow steps", value: "4 curated prompts" },
   { label: "Avg. build time", value: "2 mins end-to-end" },
@@ -19,18 +26,17 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
     <>
       <section className="grid gap-12 md:grid-cols-[1.1fr_0.9fr] items-center">
         <div className="space-y-8">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+          <div className="inline-flex items-center gap-2 rounded-lg  bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
             AI Prompt Architect
           </div>
 
           <div className="space-y-4">
             <h1 className="text-4xl leading-tight text-white md:text-6xl md:leading-tight">
-              Design elite system personas in minutes, not meetings.
+              Design elite system Personas and Prompts in minutes
             </h1>
             <p className="text-lg text-slate-400 md:text-xl">
-              Feed your copilots with tailored system instructions that mirror
-              the rigor of Trendy AI’s workflow design. Capture role, tone,
-              rituals, and edge-cases through one guided interview.
+              Feed your copilots with tailored system instructions. Define role,
+              tone, rituals, and edge-cases through one guided interview.
             </p>
           </div>
 
@@ -56,7 +62,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
             {BADGES.map((badge) => (
               <span
                 key={badge}
-                className="rounded-full border border-white/10 px-4 py-1 text-sm text-slate-400">
+                className="px-4 py-1 text-sm bg-white/5 rounded-lg text-slate-400">
                 {badge} ops ready
               </span>
             ))}

@@ -8,20 +8,20 @@ Powered by **Google Gemini AI**, this tool guides you through a structured wizar
 
 ## ✨ Features
 
--   **Guided Wizard Interface**: A step-by-step process to capture essential persona details (Role, Tech Stack, Behavior, Methodology).
--   **AI-Powered Synthesis**: Uses Google's Gemini AI to generate nuanced, authoritative system instructions based on your inputs.
--   **Expert Templates**: Generates personas following strict, high-performance engineering standards (e.g., "Senior Full-Stack Developer").
--   **Modern UI/UX**: Built with a glassmorphism design, smooth animations, and a responsive layout.
--   **One-Click Copy**: Easily copy the generated markdown to your clipboard for immediate use in ChatGPT, Claude, or Gemini.
+- **Guided Wizard Interface**: A step-by-step process to capture essential persona details (Role, Tech Stack, Behavior, Methodology).
+- **AI-Powered Synthesis**: Uses Google's Gemini AI to generate nuanced, authoritative system instructions based on your inputs.
+- **Expert Templates**: Generates personas following strict, high-performance engineering standards (e.g., "Senior Full-Stack Developer").
+- **Modern UI/UX**: Built with a glassmorphism design, smooth animations, and a responsive layout.
+- **One-Click Copy**: Easily copy the generated markdown to your clipboard for immediate use in ChatGPT, Claude, or Gemini.
 
 ## 🛠️ Tech Stack
 
--   **Frontend Framework**: [React 19](https://react.dev/)
--   **Build Tool**: [Vite](https://vitejs.dev/)
--   **Language**: [TypeScript](https://www.typescriptlang.org/)
--   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
--   **Icons**: [Lucide React](https://lucide.dev/)
--   **AI Integration**: [Google GenAI SDK](https://github.com/google/google-auth-library-nodejs) (Gemini models)
+- **Frontend Framework**: [React 19](https://react.dev/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **AI Integration**: [Google GenAI SDK](https://github.com/google/google-auth-library-nodejs) (Gemini models)
 
 ## 🚀 Getting Started
 
@@ -29,25 +29,28 @@ Follow these instructions to get the project up and running on your local machin
 
 ### Prerequisites
 
--   Node.js (v18 or higher)
--   npm or yarn
--   A Google Gemini API Key ([Get one here](https://aistudio.google.com/app/apikey))
+- Node.js (v18 or higher)
+- npm or yarn
+- A Google Gemini API Key ([Get one here](https://aistudio.google.com/app/apikey))
 
 ### Installation
 
 1.  **Clone the repository**
+
     ```bash
     git clone https://github.com/ersincodes/promptArchitect.git
     cd promptArchitect
     ```
 
 2.  **Install dependencies**
+
     ```bash
     npm install
     ```
 
 3.  **Configure Environment Variables**
     Create a `.env` file in the root directory and add your API key:
+
     ```env
     VITE_API_KEY=your_google_gemini_api_key_here
     ```
@@ -80,11 +83,11 @@ src/
 
 1.  **Start the Architect**: Click "Start Architecting" on the welcome screen.
 2.  **Answer Questions**:
-    *   **Role**: Define who the AI is (e.g., "Senior Python Engineer").
-    *   **Tools**: List the tech stack or concepts to use.
-    *   **Behavior**: Set the tone (e.g., "Critical, nuanced, step-by-step").
-    *   **Principles**: Define core methodologies (e.g., "DRY, SOLID, Mobile-first").
-    *   **Style**: Specify output format (e.g., "Strict code, no prose").
+    - **Role**: Define who the AI is (e.g., "Senior Python Engineer").
+    - **Tools**: List the tech stack or concepts to use.
+    - **Behavior**: Set the tone (e.g., "Critical, nuanced, step-by-step").
+    - **Principles**: Define core methodologies (e.g., "DRY, SOLID, Mobile-first").
+    - **Style**: Specify output format (e.g., "Strict code, no prose").
 3.  **Generate**: The app will send your inputs to Gemini to synthesize a robust system prompt.
 4.  **Copy & Use**: Copy the result and paste it into your AI assistant's "System Instructions" or initial prompt.
 
@@ -106,8 +109,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **Ersin Bahar**
 
--   GitHub: [@ersincodes](https://github.com/ersincodes)
+- GitHub: [@ersincodes](https://github.com/ersincodes)
 
 ---
 
-*Built with ❤️ using React & AI*
+_Built with ❤️ using React & AI_

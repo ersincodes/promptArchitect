@@ -78,7 +78,11 @@ const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
       return;
     }
 
-    window.open("https://trendy-ai-xi.vercel.app/", "_blank", "noopener,noreferrer");
+    window.open(
+      "https://trendy-ai-xi.vercel.app/",
+      "_blank",
+      "noopener,noreferrer"
+    );
   };
 
   return (
@@ -90,29 +94,26 @@ const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
             Prompt Builder
           </div>
           <h2 className="text-3xl font-bold text-white mt-2">
-            Transform the persona into a production-ready JSON prompt
+            Generate a JSON prompt from the persona
           </h2>
           <p className="text-slate-400 text-sm md:text-base mt-3 max-w-2xl">
-            Describe the desired output on the left. The persona will translate
-            it into a concise JSON payload capped at {MAX_PROMPT_CHARACTERS}{" "}
-            characters so you can drop it straight into your favorite
-            generative model.
+            Describe the desired output on the left. The persona will generate a
+            JSON prompt capped at {MAX_PROMPT_CHARACTERS} characters so you can
+            drop it straight into your favorite generative model.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={onBack}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700 transition-colors"
-            aria-label="Back to persona"
-          >
+            aria-label="Back to persona">
             <ArrowLeft className="w-4 h-4" />
             Back to Persona
           </button>
           <button
             onClick={onReset}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-900 text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors"
-            aria-label="Create new persona"
-          >
+            aria-label="Create new persona">
             <Undo2 className="w-4 h-4" />
             Start Over
           </button>
@@ -133,8 +134,7 @@ const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
           <div>
             <label
               htmlFor="prompt-input"
-              className="text-sm font-semibold text-slate-200 flex items-center justify-between"
-            >
+              className="text-sm font-semibold text-slate-200 flex items-center justify-between">
               Describe the scene or task
               <span className="text-xs font-mono text-slate-500">
                 {promptIdea.length} chars
@@ -166,8 +166,7 @@ const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
                 ? "bg-slate-700 cursor-not-allowed"
                 : "bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-indigo-500/30"
             )}
-            aria-label="Generate structured prompt"
-          >
+            aria-label="Generate structured prompt">
             {isGenerating ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -181,8 +180,7 @@ const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
           {error && (
             <div
               role="alert"
-              className="rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 text-sm p-4"
-            >
+              className="rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 text-sm p-4">
               {error}
             </div>
           )}
@@ -206,8 +204,7 @@ const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
                   ? "bg-slate-800 text-slate-200 hover:bg-slate-700"
                   : "bg-slate-900 text-slate-500 cursor-not-allowed"
               )}
-              aria-label="Copy JSON prompt"
-            >
+              aria-label="Copy JSON prompt">
               <Copy className="w-4 h-4" />
               {copied ? "Copied" : "Copy"}
             </button>
@@ -246,8 +243,7 @@ const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
                 ? "bg-gradient-to-r from-emerald-400 to-green-500 hover:shadow-lg hover:shadow-emerald-500/30"
                 : "bg-slate-800 text-slate-500 cursor-not-allowed"
             )}
-            aria-label="Open Trendy AI to generate an image"
-          >
+            aria-label="Open Trendy AI to generate an image">
             Generate an image NOW!
           </button>
         </section>
@@ -257,4 +253,3 @@ const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
 };
 
 export default PromptBuilderScreen;
-

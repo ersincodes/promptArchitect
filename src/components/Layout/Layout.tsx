@@ -1,18 +1,20 @@
 import React from "react";
-import { BrainCircuit } from "lucide-react";
+import { BrainCircuit, Link } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
   onReset?: () => void;
   showReset?: boolean;
+  showNavLinks?: boolean;
 }
 
-const NAV_LINKS = ["Product", "Solutions", "Resources", "Updates"];
+const NAV_LINKS = ["Product", "Solutions", "Resources"];
 
 export const Layout: React.FC<LayoutProps> = ({
   children,
   onReset,
   showReset = true,
+  showNavLinks = true,
 }) => {
   return (
     <div className="min-h-screen w-full bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30 selection:text-indigo-200 flex flex-col relative overflow-hidden">
@@ -48,17 +50,19 @@ export const Layout: React.FC<LayoutProps> = ({
             </div>
           </div>
 
-          <nav className="hidden gap-6 text-sm text-slate-400 md:flex">
-            {NAV_LINKS.map((link) => (
-              <button
-                key={link}
-                className="rounded-full px-3 py-2 text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-indigo-400/70"
-                type="button"
-                aria-label={`${link} section placeholder`}>
-                {link}
-              </button>
-            ))}
-          </nav>
+          {showNavLinks && (
+            <nav className="hidden gap-6 text-sm text-slate-400 md:flex">
+              {NAV_LINKS.map((link) => (
+                <button
+                  key={link}
+                  className="rounded-full px-3 py-2 text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-indigo-400/70"
+                  type="button"
+                  aria-label={`${link} section placeholder`}>
+                  {link}
+                </button>
+              ))}
+            </nav>
+          )}
 
           <div className="flex items-center gap-3">
             {showReset && (
@@ -72,8 +76,13 @@ export const Layout: React.FC<LayoutProps> = ({
             <button
               className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-950 shadow-[0_15px_45px_rgba(15,23,42,0.45)] transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
               type="button"
-              aria-label="Join waitlist placeholder">
-              Join waitlist
+              aria-label="Generate Image">
+              <a
+                href="https://trendy-ai-xi.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer">
+                Generate Image
+              </a>
             </button>
           </div>
         </div>
