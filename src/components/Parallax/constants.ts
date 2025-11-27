@@ -42,7 +42,7 @@ export const PARALLAX_LAYERS: ParallaxLayer[] = [
     badge: "Generate a prompt",
     depth: 0.35,
     layout: "bottom-4 left-6 w-72 md:w-80",
-    accent: "from-orange-500/40 to-rose-500/10",
+    accent: "from-cyan-900/60 to-emerald-900/10",
     imageSrc: "/assets/images/generate-prompt.png",
     imageAlt: "Prompt generation dashboard with analytic overlays",
   },
