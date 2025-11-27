@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import {
   CarouselNavigation,
@@ -33,6 +33,27 @@ export const ParallaxShowcase: React.FC = () => {
       totalItems: PARALLAX_LAYERS.length,
       isActive: isFocusMode,
     });
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const { body } = document;
+    const previousOverflow = body.style.overflow;
+
+    if (!isFocusMode) {
+      return () => {
+        body.style.overflow = previousOverflow;
+      };
+    }
+
+    body.style.overflow = "hidden";
+
+    return () => {
+      body.style.overflow = previousOverflow;
+    };
+  }, [isFocusMode]);
 
   const handleCloseFocus = useCallback(() => {
     setIsFocusMode(false);

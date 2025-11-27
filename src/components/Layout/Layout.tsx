@@ -41,11 +41,8 @@ export const Layout: React.FC<LayoutProps> = ({
               <BrainCircuit className="h-5 w-5 text-white" />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="text-xs uppercase tracking-[0.3em] text-slate-500">
-                Prompt
-              </span>
-              <span className="text-base font-semibold text-white">
-                Architect
+              <span className="text-md uppercase tracking-[0.3em] text-white">
+                Prompty
               </span>
             </div>
           </div>
