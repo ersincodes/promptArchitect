@@ -8,7 +8,18 @@ interface LayoutProps {
   showNavLinks?: boolean;
 }
 
-const NAV_LINKS = ["Product", "Solutions", "Resources"];
+type NavLinkConfig = {
+  label: string;
+  targetId: string;
+  offset?: number;
+  offsetRatio?: number;
+};
+
+const NAV_LINKS: NavLinkConfig[] = [
+  { label: "Product", targetId: "immersive-blueprint", offset: 120 },
+  { label: "Solutions", targetId: "immersive-composer", offsetRatio: 1 },
+  { label: "Resources", targetId: "immersive-output", offset: 120 },
+];
 
 export const Layout: React.FC<LayoutProps> = ({
   children,
@@ -16,6 +27,39 @@ export const Layout: React.FC<LayoutProps> = ({
   showReset = true,
   showNavLinks = true,
 }) => {
+  const handleNavClick = ({
+    targetId,
+    offset = 0,
+    offsetRatio = 0,
+  }: NavLinkConfig) => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const targetElement = document.getElementById(targetId);
+
+    if (!targetElement) {
+      return;
+    }
+
+    const headerHeight =
+      document.querySelector("header")?.getBoundingClientRect().height ?? 0;
+    const viewportHeight = window.innerHeight;
+
+    const targetPosition =
+      targetElement.getBoundingClientRect().top +
+      window.scrollY -
+      headerHeight +
+      offset +
+      viewportHeight * offsetRatio;
+    const clampedPosition = Math.min(
+      targetPosition,
+      document.documentElement.scrollHeight - window.innerHeight
+    );
+
+    window.scrollTo({ top: clampedPosition, behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen w-full bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30 selection:text-indigo-200 flex flex-col relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -51,11 +95,12 @@ export const Layout: React.FC<LayoutProps> = ({
             <nav className="hidden gap-6 text-sm text-slate-400 md:flex">
               {NAV_LINKS.map((link) => (
                 <button
-                  key={link}
+                  key={link.label}
                   className="rounded-full px-3 py-2 text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-indigo-400/70"
                   type="button"
-                  aria-label={`${link} section placeholder`}>
-                  {link}
+                  onClick={() => handleNavClick(link)}
+                  aria-label={`Jump to ${link.label} section`}>
+                  {link.label}
                 </button>
               ))}
             </nav>

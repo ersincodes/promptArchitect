@@ -74,7 +74,7 @@ const SAMPLE_JSON_PROMPT = `{
   }
 }`;
 
-const MAX_PROMPT_CHARACTERS = 2000;
+const MAX_PROMPT_CHARACTERS = 3000;
 
 const sanitizeModelJson = (raw: string) => {
   if (!raw) {
@@ -223,6 +223,6 @@ REQUIREMENTS:
   }
 
   throw new Error(
-    "Generated prompt exceeded the 2000 character limit. Please refine your input."
+    `Generated prompt exceeded the ${MAX_PROMPT_CHARACTERS} character limit. Please refine your input.`
   );
 };
