@@ -15,7 +15,7 @@ interface PromptBuilderScreenProps {
   onReset: () => void;
 }
 
-const MAX_PROMPT_CHARACTERS = 2000;
+const MAX_PROMPT_CHARACTERS = 3000;
 
 const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
   persona,

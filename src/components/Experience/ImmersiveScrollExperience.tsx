@@ -159,6 +159,7 @@ export const ImmersiveScrollExperience: React.FC<
   return (
     <section className="mt-24 space-y-32">
       <div
+        id="immersive-blueprint"
         ref={blueprintRef}
         className="relative rounded-[36px] border border-white/5 bg-gradient-to-br from-slate-900 via-slate-900/70 to-slate-900 px-8 py-16 text-white shadow-[0_40px_120px_rgba(2,6,23,0.75)]">
         <div className="blueprint-heading space-y-3">
@@ -193,6 +194,7 @@ export const ImmersiveScrollExperience: React.FC<
       </div>
 
       <div
+        id="immersive-composer"
         ref={composerRef}
         className="relative rounded-[36px] border border-white/5 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-8 py-16 text-white shadow-[0_40px_120px_rgba(2,6,23,0.75)]">
         <div className="grid gap-12 md:grid-cols-[1.1fr_0.9fr] items-center">
@@ -240,6 +242,7 @@ export const ImmersiveScrollExperience: React.FC<
       </div>
 
       <div
+        id="immersive-output"
         ref={outputRef}
         className="relative rounded-[36px] border border-white/5 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950 px-8 py-16 text-white shadow-[0_40px_120px_rgba(2,6,23,0.75)]">
         <div className="output-heading space-y-3">
