@@ -84,7 +84,7 @@ REQUIREMENTS:
 - Use this sample as inspiration for structure (do NOT copy values): {"promptDetails":{"description":"Ultra-detailed exploded technical infographic of {OBJECT_NAME}, shown in a 3/4 front isometric view...","styleTags":["Exploded View","Technical Infographic","Photoreal 3D CAD Render"]},"negativePrompt":"no people, no messy layout, no extra components","generationHints":{"aspectRatio":"2:3","detailLevel":"ultra","stylization":"low-medium","camera":{"angle":"3/4 front isometric","lens":"product render perspective"},"lighting":"soft even studio lighting","background":"smooth dark gray seamless backdrop"}}`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-3-flash",
       contents: [
         {
           parts: [{ text: prompt }],
