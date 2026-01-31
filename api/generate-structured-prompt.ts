@@ -1,5 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
-
+const API_BASE = "https://generativelanguage.googleapis.com/v1beta";
+const MODEL_PATH = "gemini-3-flash-preview:generateContent";
 const MAX_PROMPT_CHARACTERS = 3000;
 
 type StructuredPromptBody = {
@@ -64,10 +64,7 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  try {
-    const ai = new GoogleGenAI({ apiKey });
-
-    const prompt = `
+  const prompt = `
 You are an elite Prompt Architect. Given the following system persona and user objective, craft a compact JSON prompt (<= ${MAX_PROMPT_CHARACTERS} characters) that maximizes downstream model performance.
 
 SYSTEM PERSONA:
@@ -83,16 +80,30 @@ REQUIREMENTS:
 - Never exceed ${MAX_PROMPT_CHARACTERS} characters.
 - Use this sample as inspiration for structure (do NOT copy values): {"promptDetails":{"description":"Ultra-detailed exploded technical infographic of {OBJECT_NAME}, shown in a 3/4 front isometric view...","styleTags":["Exploded View","Technical Infographic","Photoreal 3D CAD Render"]},"negativePrompt":"no people, no messy layout, no extra components","generationHints":{"aspectRatio":"2:3","detailLevel":"ultra","stylization":"low-medium","camera":{"angle":"3/4 front isometric","lens":"product render perspective"},"lighting":"soft even studio lighting","background":"smooth dark gray seamless backdrop"}}`;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash",
-      contents: [
-        {
-          parts: [{ text: prompt }],
-        },
-      ],
+  const url = `${API_BASE}/models/${MODEL_PATH}?key=${apiKey}`;
+  const payload = {
+    contents: [{ parts: [{ text: prompt }] }],
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
 
-    const responseText = response.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      const message =
+        errorData?.error?.message ||
+        `Upstream error: ${response.status} ${response.statusText}`;
+      console.error("Gemini API error:", message);
+      res.status(response.status).json({ error: message });
+      return;
+    }
+
+    const json = await response.json();
+    const responseText = json?.candidates?.[0]?.content?.parts?.[0]?.text;
     const sanitized = sanitizeModelJson(responseText || "");
 
     let parsed: unknown;
@@ -121,12 +132,12 @@ REQUIREMENTS:
     res.status(500).json({
       error: `Generated prompt exceeded the ${MAX_PROMPT_CHARACTERS} character limit. Please refine your input.`,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error generating structured prompt:", error);
-    res
-      .status(500)
-      .json({
-        error: "Failed to generate structured prompt. Please try again.",
-      });
+    res.status(500).json({
+      error:
+        error?.message ||
+        "Failed to generate structured prompt. Please try again.",
+    });
   }
 }
