@@ -6,9 +6,24 @@ export interface Answers {
   style: string;
 }
 
+export type LlmProvider = "openai" | "anthropic" | "gemini" | "local";
+
+export interface GenerationConfig {
+  provider: LlmProvider;
+  apiKey: string;
+  localBaseUrl: string;
+}
+
+export const INITIAL_GENERATION_CONFIG: GenerationConfig = {
+  provider: "gemini",
+  apiKey: "",
+  localBaseUrl: "",
+};
+
 export enum AppState {
   WELCOME = "WELCOME",
   WIZARD = "WIZARD",
+  PROVIDER = "PROVIDER",
   GENERATING = "GENERATING",
   RESULT = "RESULT",
   PROMPT = "PROMPT",

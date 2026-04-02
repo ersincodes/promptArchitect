@@ -1,3 +1,8 @@
+import {
+  completeText,
+  type LlmProviderId,
+} from "./lib/completeText";
+
 type Answers = {
   role: string;
   tools: string;
@@ -5,9 +10,6 @@ type Answers = {
   principles: string;
   style: string;
 };
-
-const API_BASE = "https://generativelanguage.googleapis.com/v1beta";
-const MODEL_PATH = "gemini-3-flash-preview:generateContent";
 
 const EXAMPLE_FORMAT = `
 You are a Senior Full-Stack Developer and an expert in ReactJS, NextJS, JavaScript, TypeScript, HTML, CSS, TailwindCSS, Shadcn UI, Radix, Python, FastAPI, Playwright, ETL pipelines, MongoDB, PostgreSQL, and modern full-stack architectures. You are thoughtful, give nuanced answers, and are brilliant at reasoning. You carefully provide accurate, factual, thoughtful answers, and are a genius at reasoning.
@@ -59,7 +61,14 @@ handleClick, handleKeyDown, handleSubmit, etc.
 Use const instead of function.
 `;
 
-const parseBody = (body: unknown): { answers?: Answers } => {
+type ParsedBody = {
+  answers?: Answers;
+  provider?: string;
+  apiKey?: string;
+  localBaseUrl?: string;
+};
+
+const parseBody = (body: unknown): ParsedBody => {
   if (!body) return {};
   if (typeof body === "string") {
     try {
@@ -68,7 +77,19 @@ const parseBody = (body: unknown): { answers?: Answers } => {
       return {};
     }
   }
-  return body as { answers?: Answers };
+  return body as ParsedBody;
+};
+
+const normalizeProvider = (raw?: string): LlmProviderId => {
+  if (
+    raw === "openai" ||
+    raw === "anthropic" ||
+    raw === "gemini" ||
+    raw === "local"
+  ) {
+    return raw;
+  }
+  return "gemini";
 };
 
 export default async function handler(req: any, res: any) {
@@ -77,7 +98,10 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  const { answers } = parseBody(req.body);
+  const { answers, provider: rawProvider, apiKey, localBaseUrl } = parseBody(
+    req.body
+  );
+
   if (
     !answers ||
     !answers.role?.trim() ||
@@ -92,11 +116,21 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    res
-      .status(500)
-      .json({ error: "Server misconfigured: missing GEMINI_API_KEY." });
+  const provider = normalizeProvider(rawProvider);
+
+  if (provider === "openai" || provider === "anthropic") {
+    if (!apiKey?.trim()) {
+      res.status(400).json({
+        error: "API key is required for the selected provider.",
+      });
+      return;
+    }
+  }
+
+  if (provider === "local" && !localBaseUrl?.trim()) {
+    res.status(400).json({
+      error: "Local base URL is required for Local AI.",
+    });
     return;
   }
 
@@ -128,41 +162,30 @@ ${EXAMPLE_FORMAT}
 Generate ONLY the final system persona text. Do not add any conversational filler before or after.
 `;
 
-  const url = `${API_BASE}/models/${MODEL_PATH}?key=${apiKey}`;
-  const payload = {
-    contents: [{ parts: [{ text: prompt }] }],
-  };
-
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+    const responseText = await completeText({
+      provider,
+      userText: prompt,
+      apiKey,
+      localBaseUrl,
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      const message =
-        errorData?.error?.message ||
-        `Upstream error: ${response.status} ${response.statusText}`;
-      console.error("Gemini API error:", message);
-      res.status(response.status).json({ error: message });
-      return;
-    }
-
-    const json = await response.json();
-    const responseText = json?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!responseText) {
+    if (!responseText?.trim()) {
       res.status(502).json({ error: "No valid text received from the model." });
       return;
     }
 
     res.status(200).json({ persona: responseText });
   } catch (error: any) {
-    console.error("Error generating persona:", error);
-    res.status(500).json({
-      error: error?.message || "Failed to generate persona. Please try again.",
-    });
+    const message = error?.message || "Failed to generate persona.";
+    const isValidation =
+      typeof message === "string" &&
+      (message.includes("required") ||
+        message.includes("Invalid") ||
+        message.includes("Unknown provider") ||
+        message.includes("must use"));
+
+    console.error("Error generating persona:", message);
+    res.status(isValidation ? 400 : 500).json({ error: message });
   }
 }

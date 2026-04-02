@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { AppState } from "./types";
+import {
+  AppState,
+  GenerationConfig,
+  INITIAL_GENERATION_CONFIG,
+} from "./types";
 import { Layout } from "./components/Layout/Layout";
 import { WelcomeScreen } from "./components/Screens/WelcomeScreen";
 import { GeneratingScreen } from "./components/Screens/GeneratingScreen";
 import { ErrorScreen } from "./components/Screens/ErrorScreen";
 import ResultScreen from "./components/Screens/ResultScreen";
 import PromptBuilderScreen from "./components/Screens/PromptBuilderScreen";
+import ProviderConfigScreen from "./components/Screens/ProviderConfigScreen";
 import Wizard from "./components/Wizard/Wizard";
 import { useWizard } from "./hooks/useWizard";
 import { generateSystemPersona } from "./services/geminiService";
@@ -14,6 +19,9 @@ const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>(AppState.WELCOME);
   const [generatedPersona, setGeneratedPersona] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [generationConfig, setGenerationConfig] = useState<GenerationConfig>(
+    INITIAL_GENERATION_CONFIG
+  );
 
   const {
     answers,
@@ -35,19 +43,25 @@ const App: React.FC = () => {
   const submitWizard = async () => {
     setAppState(AppState.GENERATING);
     try {
-      const persona = await generateSystemPersona(answers);
+      const persona = await generateSystemPersona(answers, generationConfig);
       setGeneratedPersona(persona);
       setAppState(AppState.RESULT);
     } catch (err) {
       setError(
-        "Something went wrong while connecting to the architect. Please try again."
+        err instanceof Error
+          ? err.message
+          : "Something went wrong while connecting to the architect. Please try again."
       );
       setAppState(AppState.ERROR);
     }
   };
 
+  const handleWizardComplete = () => {
+    setAppState(AppState.PROVIDER);
+  };
+
   const onNextStep = () => {
-    handleNext(submitWizard);
+    handleNext(handleWizardComplete);
   };
 
   const onBackStep = () => {
@@ -58,6 +72,7 @@ const App: React.FC = () => {
     resetWizard();
     setGeneratedPersona("");
     setError(null);
+    setGenerationConfig(INITIAL_GENERATION_CONFIG);
     setAppState(AppState.WELCOME);
   };
 
@@ -91,6 +106,16 @@ const App: React.FC = () => {
           />
         );
 
+      case AppState.PROVIDER:
+        return (
+          <ProviderConfigScreen
+            generationConfig={generationConfig}
+            onGenerationConfigChange={setGenerationConfig}
+            onGeneratePersona={submitWizard}
+            onBackToWizard={() => setAppState(AppState.WIZARD)}
+          />
+        );
+
       case AppState.GENERATING:
         return <GeneratingScreen />;
 
@@ -107,6 +132,7 @@ const App: React.FC = () => {
         return (
           <PromptBuilderScreen
             persona={generatedPersona}
+            generationConfig={generationConfig}
             onBack={() => setAppState(AppState.RESULT)}
             onReset={handleReset}
           />
@@ -116,7 +142,7 @@ const App: React.FC = () => {
         return (
           <ErrorScreen
             error={error}
-            onRetry={() => setAppState(AppState.WIZARD)}
+            onRetry={() => setAppState(AppState.PROVIDER)}
           />
         );
 

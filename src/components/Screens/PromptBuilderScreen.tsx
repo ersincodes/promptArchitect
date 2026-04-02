@@ -7,10 +7,12 @@ import {
   Undo2,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { GenerationConfig } from "../../types";
 import { generateStructuredPrompt } from "../../services/geminiService";
 
 interface PromptBuilderScreenProps {
   persona: string;
+  generationConfig: GenerationConfig;
   onBack: () => void;
   onReset: () => void;
 }
@@ -19,6 +21,7 @@ const MAX_PROMPT_CHARACTERS = 3000;
 
 const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
   persona,
+  generationConfig,
   onBack,
   onReset,
 }) => {
@@ -43,7 +46,11 @@ const PromptBuilderScreen: React.FC<PromptBuilderScreenProps> = ({
     setIsGenerating(true);
     setError(null);
     try {
-      const result = await generateStructuredPrompt(persona, promptIdea);
+      const result = await generateStructuredPrompt(
+        persona,
+        promptIdea,
+        generationConfig
+      );
       setGeneratedPrompt(result);
     } catch (err) {
       const message =

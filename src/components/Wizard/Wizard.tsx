@@ -103,7 +103,7 @@ const Wizard: React.FC<WizardStepProps> = ({
               {isLast ? (
                 <>
                   <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
-                  Generate Persona
+                  Continue to model setup
                 </>
               ) : (
                 <>

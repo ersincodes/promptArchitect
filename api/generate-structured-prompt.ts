@@ -1,10 +1,16 @@
-const API_BASE = "https://generativelanguage.googleapis.com/v1beta";
-const MODEL_PATH = "gemini-3-flash-preview:generateContent";
+import {
+  completeText,
+  type LlmProviderId,
+} from "./lib/completeText";
+
 const MAX_PROMPT_CHARACTERS = 3000;
 
 type StructuredPromptBody = {
   persona?: string;
   userPrompt?: string;
+  provider?: string;
+  apiKey?: string;
+  localBaseUrl?: string;
 };
 
 const sanitizeModelJson = (raw: string) => {
@@ -33,13 +39,31 @@ const parseBody = (body: unknown): StructuredPromptBody => {
   return body as StructuredPromptBody;
 };
 
+const normalizeProvider = (raw?: string): LlmProviderId => {
+  if (
+    raw === "openai" ||
+    raw === "anthropic" ||
+    raw === "gemini" ||
+    raw === "local"
+  ) {
+    return raw;
+  }
+  return "gemini";
+};
+
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
     return;
   }
 
-  const { persona, userPrompt } = parseBody(req.body);
+  const {
+    persona,
+    userPrompt,
+    provider: rawProvider,
+    apiKey,
+    localBaseUrl,
+  } = parseBody(req.body);
 
   if (!persona?.trim()) {
     res
@@ -56,11 +80,21 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    res
-      .status(500)
-      .json({ error: "Server misconfigured: missing GEMINI_API_KEY." });
+  const provider = normalizeProvider(rawProvider);
+
+  if (provider === "openai" || provider === "anthropic") {
+    if (!apiKey?.trim()) {
+      res.status(400).json({
+        error: "API key is required for the selected provider.",
+      });
+      return;
+    }
+  }
+
+  if (provider === "local" && !localBaseUrl?.trim()) {
+    res.status(400).json({
+      error: "Local base URL is required for Local AI.",
+    });
     return;
   }
 
@@ -80,30 +114,14 @@ REQUIREMENTS:
 - Never exceed ${MAX_PROMPT_CHARACTERS} characters.
 - Use this sample as inspiration for structure (do NOT copy values): {"promptDetails":{"description":"Ultra-detailed exploded technical infographic of {OBJECT_NAME}, shown in a 3/4 front isometric view...","styleTags":["Exploded View","Technical Infographic","Photoreal 3D CAD Render"]},"negativePrompt":"no people, no messy layout, no extra components","generationHints":{"aspectRatio":"2:3","detailLevel":"ultra","stylization":"low-medium","camera":{"angle":"3/4 front isometric","lens":"product render perspective"},"lighting":"soft even studio lighting","background":"smooth dark gray seamless backdrop"}}`;
 
-  const url = `${API_BASE}/models/${MODEL_PATH}?key=${apiKey}`;
-  const payload = {
-    contents: [{ parts: [{ text: prompt }] }],
-  };
-
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+    const responseText = await completeText({
+      provider,
+      userText: prompt,
+      apiKey,
+      localBaseUrl,
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null);
-      const message =
-        errorData?.error?.message ||
-        `Upstream error: ${response.status} ${response.statusText}`;
-      console.error("Gemini API error:", message);
-      res.status(response.status).json({ error: message });
-      return;
-    }
-
-    const json = await response.json();
-    const responseText = json?.candidates?.[0]?.content?.parts?.[0]?.text;
     const sanitized = sanitizeModelJson(responseText || "");
 
     let parsed: unknown;
@@ -133,11 +151,15 @@ REQUIREMENTS:
       error: `Generated prompt exceeded the ${MAX_PROMPT_CHARACTERS} character limit. Please refine your input.`,
     });
   } catch (error: any) {
-    console.error("Error generating structured prompt:", error);
-    res.status(500).json({
-      error:
-        error?.message ||
-        "Failed to generate structured prompt. Please try again.",
-    });
+    const message = error?.message || "Failed to generate structured prompt.";
+    const isValidation =
+      typeof message === "string" &&
+      (message.includes("required") ||
+        message.includes("Invalid") ||
+        message.includes("Unknown provider") ||
+        message.includes("must use"));
+
+    console.error("Error generating structured prompt:", message);
+    res.status(isValidation ? 400 : 500).json({ error: message });
   }
 }

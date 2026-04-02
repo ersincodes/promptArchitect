@@ -1,4 +1,4 @@
-import { Answers } from "../types";
+import { Answers, GenerationConfig } from "../types";
 
 type PersonaResponse = { persona?: string; error?: string };
 type StructuredPromptResponse = { prompt?: string; error?: string };
@@ -22,11 +22,19 @@ const postJson = async <T>(
   return json as T;
 };
 
+const generationPayload = (config: GenerationConfig) => ({
+  provider: config.provider,
+  apiKey: config.apiKey,
+  localBaseUrl: config.localBaseUrl,
+});
+
 export const generateSystemPersona = async (
-  answers: Answers
+  answers: Answers,
+  config: GenerationConfig
 ): Promise<string> => {
   const json = await postJson<PersonaResponse>("/api/generate-persona", {
     answers,
+    ...generationPayload(config),
   });
 
   if (!json.persona) {
@@ -38,11 +46,16 @@ export const generateSystemPersona = async (
 
 export const generateStructuredPrompt = async (
   persona: string,
-  userPrompt: string
+  userPrompt: string,
+  config: GenerationConfig
 ): Promise<string> => {
   const json = await postJson<StructuredPromptResponse>(
     "/api/generate-structured-prompt",
-    { persona, userPrompt }
+    {
+      persona,
+      userPrompt,
+      ...generationPayload(config),
+    }
   );
 
   if (!json.prompt) {
